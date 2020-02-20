@@ -1,7 +1,9 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
+sword = Item("Sword", "short")
 
 room = {
     'outside':  Room("Outside Cave Entrance",
@@ -12,7 +14,7 @@ passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", [sword]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -63,17 +65,14 @@ while choice != "q":
             current = key
     if hasattr(room[current], str(direction)) == True:
         player_1.room = eval(f'room["{current}"].{direction}')
-        print(f'\n{player_1.name} is now is {player_1.room}')
+        print(f'\n{player_1.name} is now in {player_1.room}')
         choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
         direction = choice + "_to"
         action = choice.lower().split()[0]
     elif action == "drop" or action == "get":
-        print("success")
         choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
         direction = choice + "_to"
         action = choice.lower().split()[0]
     else:
-        print(direction)
-        print(action)
         choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
         direction = choice + "_to"
