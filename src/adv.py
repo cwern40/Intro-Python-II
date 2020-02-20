@@ -61,7 +61,7 @@ while choice != "q":
             current = key
     if hasattr(room[current], str(direction)) == True:
         player_1.room = eval(f'room["{current}"].{direction}')
-        print(f'{player_1.name} is now is {player_1.room}')
+        print(f'\n{player_1.name} is now is {player_1.room}')
         choice = input("Where do you want to go now? (use the Cardinal direction n,s,e, or w): ")
         direction = choice + "_to"
     else:
