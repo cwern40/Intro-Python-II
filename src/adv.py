@@ -52,8 +52,10 @@ player_1 = Player("The Guardian", room['outside'])
 #
 # If the user enters "q", quit the game.
 print(player_1)
-choice = input("Where do you want to go? (use the Cardinal direction n, s, e, or w): ")
+choice = input("Where do you want to go? (use the cardinal direction n, s, e, or w): ")
 direction = choice.lower() + "_to"
+action = choice.lower().split()[0]
+print(action)
 while choice != "q":
     current = ""
     for key, value in room.items():
@@ -62,8 +64,16 @@ while choice != "q":
     if hasattr(room[current], str(direction)) == True:
         player_1.room = eval(f'room["{current}"].{direction}')
         print(f'\n{player_1.name} is now is {player_1.room}')
-        choice = input("Where do you want to go now? (use the Cardinal direction n,s,e, or w): ")
+        choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
         direction = choice + "_to"
+        action = choice.lower().split()[0]
+    elif action == "drop" or action == "get":
+        print("success")
+        choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+        direction = choice + "_to"
+        action = choice.lower().split()[0]
     else:
+        print(direction)
+        print(action)
         choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
         direction = choice + "_to"
