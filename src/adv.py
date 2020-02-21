@@ -3,7 +3,6 @@ from player import Player
 from item import Item
 
 # Declare all the rooms
-sword = Item("Sword", "short")
 
 room = {
     'outside':  Room("Outside Cave Entrance",
@@ -14,7 +13,7 @@ passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", [sword]),
+the distance, but there is no way across the chasm.""", [Item("Sword", "short")]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -70,9 +69,17 @@ while choice != "q":
         else:
             choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
     elif len(choice.split()) == 2:
-        action = choice.lower().split()[0]
-        if action == "drop" or action == "get":
-            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+        action = choice.split()[0].lower()
+        action_item = choice.split()[1].capitalize()
+        if action == "get":
+            # print(room[current])
+            for i in room[current].current_items:
+                    if i.name == action_item:
+                        player_1.current_items.append(i)
+                        room[current].current_items.remove(i)
+                        if i.on_take() != None:
+                            print(f'{i.on_take()}')
+            choice = input("Test. Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
         else:
             choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
     else:
