@@ -53,7 +53,7 @@ player_1 = Player("The Guardian", room['outside'])
 #
 # If the user enters "q", quit the game.
 print(player_1)
-choice = input("Where do you want to go? (use the cardinal direction n, s, e, or w): ")
+choice = input("Where do you want to go? Type a cardinal direction (n, s, e, or w): ")
 
 while choice != "q":
     current = ""
@@ -61,26 +61,39 @@ while choice != "q":
         if player_1.room == value:
             current = key
     if len(choice.split()) == 1:
+        print(room['foyer'].current_items)
         direction = choice.lower() + "_to"
         if hasattr(room[current], str(direction)) == True:
             player_1.room = eval(f'room["{current}"].{direction}')
             print(f'\n{player_1.name} is now in {player_1.room}')
-            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
         else:
-            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+            choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
     elif len(choice.split()) == 2:
+        print(room['foyer'].current_items)
         action = choice.split()[0].lower()
         action_item = choice.split()[1].capitalize()
         if action == "get":
-            # print(room[current])
+            print(room['foyer'].current_items)
             for i in room[current].current_items:
                     if i.name == action_item:
                         player_1.current_items.append(i)
                         room[current].current_items.remove(i)
                         if i.on_take() != None:
                             print(f'{i.on_take()}')
-            choice = input("Test. Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+            print(f'\n{player_1.name} now has the following items: {player_1.item_inventory()}and is still in {player_1.room}')           
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
+        elif action == "drop":
+            print(room['foyer'].current_items)
+            for i in player_1.current_items:
+                    if i.name == action_item:
+                        player_1.current_items.remove(i)
+                        room[current].current_items.append(i)
+                        if i.on_drop() != None:
+                            print(f'{i.on_drop()}')
+            print(f'\n{player_1.name} now has the following items: {player_1.item_inventory()}and is still in {player_1.room}')           
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
         else:
-            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+            choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
     else:
-        choice = input("Invalid number of arguments. Please choose a differenct cardinal direction (n, s, e, or w): ")
+        choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")

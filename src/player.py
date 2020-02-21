@@ -8,7 +8,7 @@ class Player:
 
     def item_inventory(self):
         if int(len(self.current_items)) == 0:
-            output = "None"
+            output = "None "
         else:
             for i in self.current_items:
                 output = f'{i}, '
