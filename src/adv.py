@@ -1,6 +1,9 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
+sword = Item("Sword", "short")
 
 room = {
     'outside':  Room("Outside Cave Entrance",
@@ -11,7 +14,7 @@ passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", [sword]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -38,6 +41,7 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+player_1 = Player("The Guardian", room['outside'])
 
 # Write a loop that:
 #
@@ -49,3 +53,27 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+print(player_1)
+choice = input("Where do you want to go? (use the cardinal direction n, s, e, or w): ")
+
+while choice != "q":
+    current = ""
+    for key, value in room.items():
+        if player_1.room == value:
+            current = key
+    if len(choice.split()) == 1:
+        direction = choice.lower() + "_to"
+        if hasattr(room[current], str(direction)) == True:
+            player_1.room = eval(f'room["{current}"].{direction}')
+            print(f'\n{player_1.name} is now in {player_1.room}')
+            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+        else:
+            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+    elif len(choice.split()) == 2:
+        action = choice.lower().split()[0]
+        if action == "drop" or action == "get":
+            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+        else:
+            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+    else:
+        choice = input("Invalid number of arguments. Please choose a differenct cardinal direction (n, s, e, or w): ")
