@@ -3,7 +3,6 @@ from player import Player
 from item import Item
 
 # Declare all the rooms
-sword = Item("Sword", "short")
 
 room = {
     'outside':  Room("Outside Cave Entrance",
@@ -14,7 +13,7 @@ passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", [sword]),
+the distance, but there is no way across the chasm.""", [Item("Sword", "short")]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -54,7 +53,7 @@ player_1 = Player("The Guardian", room['outside'])
 #
 # If the user enters "q", quit the game.
 print(player_1)
-choice = input("Where do you want to go? (use the cardinal direction n, s, e, or w): ")
+choice = input("Where do you want to go? Type a cardinal direction (n, s, e, or w): ")
 
 while choice != "q":
     current = ""
@@ -66,14 +65,30 @@ while choice != "q":
         if hasattr(room[current], str(direction)) == True:
             player_1.room = eval(f'room["{current}"].{direction}')
             print(f'\n{player_1.name} is now in {player_1.room}')
-            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
         else:
-            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+            choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
     elif len(choice.split()) == 2:
-        action = choice.lower().split()[0]
-        if action == "drop" or action == "get":
-            choice = input("Where do you want to go now? (use the Cardinal direction n, s, e, or w): ")
+        action = choice.split()[0].lower()
+        if action == "get":
+            for i in player_1.room.current_items:
+                if choice.split()[1].capitalize() == i.name:
+                    get_item = i
+            player_1.current_items.append(get_item)
+            player_1.room.current_items.remove(get_item)
+            print(get_item.on_take())
+            print(f'\n{player_1.name} now has the following items: {player_1.item_inventory()}and is still in {player_1.room}')           
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
+        elif action == "drop":
+            for i in player_1.current_items:
+                if choice.split()[1].capitalize() == i.name:
+                    drop_item = i
+            player_1.current_items.remove(drop_item)
+            player_1.room.current_items.append(drop_item)
+            print(drop_item.on_drop())
+            print(f'\n{player_1.name} now has the following items: {player_1.item_inventory()}and is still in {player_1.room}')           
+            choice = input("What do you want to do now? Type a cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
         else:
-            choice = input("invalid selection. Please choose a differenct cardinal direction (n, s, e, or w): ")
+            choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")
     else:
-        choice = input("Invalid number of arguments. Please choose a differenct cardinal direction (n, s, e, or w): ")
+        choice = input("invalid selection. Please type a differenct cardinal direction (n, s, e, or w) to go to a different room or get/drop (item name) to drop or add an item if available: ")

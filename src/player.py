@@ -6,6 +6,14 @@ class Player:
         self.room = room
         self.current_items = current_items
 
+    def item_inventory(self):
+        if int(len(self.current_items)) == 0:
+            output = "None "
+        else:
+            for i in self.current_items:
+                output = f'{i}, '
+        return output
+
     def __str__(self):
         output = f'{self.name} has the following items: '
         if int(len(self.current_items)) == 0:
